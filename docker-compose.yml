@@ -1,0 +1,26 @@
+version: '3.4'
+
+services:
+  lab2:
+    image: ${DOCKER_REGISTRY-}lab2
+    build:
+      context: .
+      dockerfile: Lab2/Dockerfile 
+  db:
+    image: postgres:14
+    hostname: localhost
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 2002
+      POSTGRES_DB: lab_db
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - pg-data:/var/lib/postgresql/data
+      - pg-conf:/etc/postgresql
+      - pg-log:/var/log/postgresql
+    restart: always
+
+volumes:
+  pg-data: {}
+  pg-conf: {}
+  pg-log: {}

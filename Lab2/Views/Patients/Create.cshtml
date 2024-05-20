@@ -1,0 +1,38 @@
+﻿@model Lab2.Models.Patient
+@{
+    var hospitals = (SelectList)ViewBag.Hospitals;
+}
+
+<h2>Добавить пациента</h2>
+
+<form asp-action="Create">
+    <div class="form-group">
+        <label asp-for="MedicalCardNumber" class="control-label">Номер медицинской карточки</label>
+        <input asp-for="MedicalCardNumber" class="form-control" />
+        <span asp-validation-for="MedicalCardNumber" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Surname" class="control-label">Фамилия</label>
+        <input asp-for="Surname" class="form-control" />
+        <span asp-validation-for="Surname" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Diagnosis" class="control-label">Диагноз</label>
+        <input asp-for="Diagnosis" class="form-control" />
+        <span asp-validation-for="Diagnosis" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Status" class="control-label">Статус</label>
+        <input asp-for="Status" class="form-control" /> 
+        <span asp-validation-for="Status" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="HospitalId" class="control-label">Больница</label>
+        <select asp-for="HospitalId" asp-items="hospitals" class="form-control"></select>
+    </div> 
+    <div class="form-group">
+        <input type="submit" value="Create" class="btn btn-primary" />
+    </div>
+
+    <a asp-action="Index">Назад</a>
+</form>

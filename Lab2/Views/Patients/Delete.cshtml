@@ -1,0 +1,17 @@
+﻿@model Lab2.Models.Patient
+
+<h2>Delete Patient</h2>
+
+<h3>Вы уверены, что хотите это удалить?</h3>
+<div>
+    <h4>@Model.Surname</h4>
+    <p>@Model.MedicalCardNumber</p>
+    <p>@Model.Diagnosis</p>
+    <p>@Model.Status</p>
+</div>
+
+<form asp-action="Delete">
+    <input type="hidden" asp-for="Id" />
+    <input type="submit" value="Delete" class="btn btn-danger" /> |
+    <a asp-action="Index">Назад</a>
+</form>
