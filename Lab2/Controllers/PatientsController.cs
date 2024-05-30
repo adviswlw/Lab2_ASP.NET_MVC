@@ -34,13 +34,9 @@ namespace Lab2.Controllers
         // GET: PatientsController/Create
         public ActionResult Create()
         {
-            // Получите список больниц. Это может быть репозиторий или сервис.
             var hospitals = _hospitalRepository.GetAll();
-
-            // Передайте список больниц в представление с помощью ViewBag.
-            ViewBag.Hospitals = new SelectList(hospitals, "Id", "ChiefDoctor");
-
-            return View();
+            ViewBag.Hospitals = new SelectList(hospitals, "Id", "Name");
+            return View(new Patient());
         }
         // POST: PatientsController/Create
         [HttpPost]
@@ -49,11 +45,20 @@ namespace Lab2.Controllers
         {
             try
             {
-                _patientRepository.Add(patient);
-                return RedirectToAction(nameof(Index));
+                if (patient.HospitalId == 0)
+                {
+                    ModelState.AddModelError("HospitalId", "Выберите больницу.");
+                    ViewBag.Hospitals = new SelectList(_hospitalRepository.GetAll(), "Id", "Name");
+                    return View(patient);
+                }
+                else
+                {
+                    _patientRepository.Add(patient);
+                    return RedirectToAction(nameof(Index));
+                }
             }
             catch
-            {
+            { 
                 return View();
             }
         }
@@ -62,6 +67,8 @@ namespace Lab2.Controllers
         public ActionResult Edit(int id)
         {
             var patient = _patientRepository.Get(id);
+            var hospitals = _hospitalRepository.GetAll();
+            ViewBag.Hospitals = new SelectList(hospitals, "Id", "Name", patient.HospitalId);
             return View(patient);
         }
         // POST: PatientsController/Edit/5
@@ -71,8 +78,25 @@ namespace Lab2.Controllers
         {
             try
             {
-                _patientRepository.Update(patient);
-                return RedirectToAction(nameof(Index));
+                if (patient.HospitalId == 0)
+                {
+                    ModelState.AddModelError("HospitalId", "Выберите больницу.");
+                    ViewBag.Hospitals = new SelectList(_hospitalRepository.GetAll(), "Id", "Name", patient.HospitalId);
+                    return View(patient);
+                }
+                else
+                { 
+                    var existingPatient = _patientRepository.Get(id);
+                     
+                    existingPatient.MedicalCardNumber = patient.MedicalCardNumber;
+                    existingPatient.Surname = patient.Surname;
+                    existingPatient.Diagnosis = patient.Diagnosis;
+                    existingPatient.Status = patient.Status;
+                    existingPatient.HospitalId = patient.HospitalId;
+
+                    _patientRepository.Update(existingPatient);
+                    return RedirectToAction(nameof(Index));
+                }
             }
             catch
             {

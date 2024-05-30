@@ -63,7 +63,13 @@ namespace Lab2.Controllers
         {
             try
             {
-                _hospitalRepository.Update(hospital);
+                var existingHospital = _hospitalRepository.Get(id);
+                existingHospital.Name = hospital.Name;
+                existingHospital.ChiefDoctor = hospital.ChiefDoctor;
+                existingHospital.Address = hospital.Address;
+                existingHospital.FoundationYear = hospital.FoundationYear;
+
+                _hospitalRepository.Update(existingHospital);
                 return RedirectToAction(nameof(Index));
             }
             catch
